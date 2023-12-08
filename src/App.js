@@ -1,24 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./App.css";
+import Index from "./page";
+import { ToastContainer } from "react-toastify";
+import { useSelector } from "react-redux";
+import Home from "./page/Home";
+import ThemeProvider from "./theme";
+import DashboardLayout from './layouts/dashboard';
+import User from "./page/user";
+
 
 function App() {
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <BrowserRouter>
+        {userInfo?.token ? (
+          <ThemeProvider>
+            <DashboardLayout>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/user" element={<User />} />
+              </Routes>
+            </DashboardLayout>
+          </ThemeProvider>
+        ) : (
+          <Index />
+        )}
+      </BrowserRouter>
+      <ToastContainer
+        position="top-right"
+        hideProgressBar={false}
+        closeOnClick={true}
+        rtl={false}
+        pauseOnFocusLoss={true}
+        draggable={true}
+        pauseOnHover={true}
+      />
+    </>
   );
 }
 
