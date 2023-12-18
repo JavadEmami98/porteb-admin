@@ -22,7 +22,7 @@ const navConfig = [
   },
   {
     title: "تراکنش ها",
-    path: "/products",
+    path: "/transactions",
     icon: icon("ic_cart"),
   },
   {

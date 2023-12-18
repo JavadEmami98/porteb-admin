@@ -7,6 +7,8 @@ import Home from "./page/Home";
 import ThemeProvider from "./theme";
 import DashboardLayout from './layouts/dashboard';
 import User from "./page/user";
+import Transactions from "./page/Transactions/Transactions";
+
 
 
 function App() {
@@ -22,6 +24,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/user" element={<User />} />
+                <Route path="/transactions" element={<Transactions />} />
               </Routes>
             </DashboardLayout>
           </ThemeProvider>

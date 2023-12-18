@@ -28,17 +28,17 @@ export default function Header({ onOpenNav }) {
 
   const renderContent = (
     <>
-     {/*  {!lgUp && (
+      {!lgUp && (
         <IconButton onClick={onOpenNav} sx={{ mr: 1 }}>
           <Iconify icon="eva:menu-2-fill" />
         </IconButton>
-      )} */}
+      )}
 
-    {/*   <Searchbar />
+     {/*  <Searchbar /> */}
 
-      <Box sx={{ flexGrow: 1 }} /> */}
-{/* 
-      <Stack direction="row" alignItems="center" spacing={1}>
+      <Box sx={{ flexGrow: 1 }} />
+
+    {/*   <Stack direction="row" alignItems="center" spacing={1}>
         <LanguagePopover />
         <NotificationsPopover />
         <AccountPopover />
@@ -49,7 +49,8 @@ export default function Header({ onOpenNav }) {
   return (
     <AppBar
       sx={{
-        boxShadow: 'none',
+        "& .muirtl-1o415lm" :{paddingTop:"0px !important"}
+      /*   boxShadow: 'none',
         height: HEADER.H_MOBILE,
         zIndex: theme.zIndex.appBar + 1,
         ...bgBlur({
@@ -61,10 +62,10 @@ export default function Header({ onOpenNav }) {
         ...(lgUp && {
           width: `calc(100% - ${NAV.WIDTH + 1}px)`,
           height: HEADER.H_DESKTOP,
-        }),
+        }), */
       }}
     >
-     {/*  <Toolbar
+    {/*   <Toolbar
         sx={{
           height: 1,
           px: { lg: 5 },

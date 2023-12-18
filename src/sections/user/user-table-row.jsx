@@ -18,15 +18,19 @@ import Iconify from "src/components/iconify";
 
 export default function UserTableRow({
   selected,
-  name,
+  _id,
   avatarUrl,
-  company,
-  role,
-  isVerified,
+  createdAt,
+  isAdmin,
+  phoneNumber,
+  accountExpiryDate,
   status,
   handleClick,
+  first_name,
+  last_name,
+  national_code,
 }) {
-  const [open, setOpen] = useState(null);
+  /*   const [open, setOpen] = useState(null);
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -34,44 +38,56 @@ export default function UserTableRow({
 
   const handleCloseMenu = () => {
     setOpen(null);
-  };
+  }; */
 
   return (
     <>
-      <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
+      <TableRow
+        hover
+        tabIndex={-1}
+        sx={{ width: "100%" }}
+        role="checkbox"
+        selected={selected}
+      >
         <TableCell padding="checkbox">
-          <Checkbox disableRipple checked={selected} onChange={handleClick} />
+          {/*    <Checkbox disableRipple checked={selected} onChange={handleClick} /> */}
         </TableCell>
-
+        <TableCell>{first_name}</TableCell>
+        <TableCell>{last_name}</TableCell>
+        <TableCell>{national_code}</TableCell>
         <TableCell component="th" scope="row" padding="none">
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar alt={name} src={avatarUrl} />
+            {/*  <Avatar alt={_id} src={avatarUrl} /> */}
             <Typography variant="subtitle2" noWrap>
-              {name}
+              {_id}
             </Typography>
           </Stack>
         </TableCell>
 
-        <TableCell>{company}</TableCell>
+        <TableCell>{createdAt}</TableCell>
 
-        <TableCell>{role}</TableCell>
+        <TableCell>{phoneNumber}</TableCell>
 
-        <TableCell align="center">{isVerified ? "Yes" : "No"}</TableCell>
-
-        <TableCell>
-          <Label color={(status === "banned" && "error") || "success"}>
-            {status}
-          </Label>
+        <TableCell align="center">
+          {accountExpiryDate ? accountExpiryDate : "-"}
         </TableCell>
 
-        <TableCell align="right">
-          <IconButton onClick={handleOpenMenu}>
+        <TableCell align="center">
+          {/*   <Label color={(status === "banned" && "error") || "success"}>
+            {status} 7
+          </Label> */}{" "}
+          7
+        </TableCell>
+
+        <TableCell align="left">
+          {isAdmin ? "ادمین" : "کاربر"}
+          {/* <IconButton onClick={handleOpenMenu}>
             <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
+          </IconButton> */}
         </TableCell>
       </TableRow>
 
-      <Popover
+      {/* <Popover
         open={!!open}
         anchorEl={open}
         onClose={handleCloseMenu}
@@ -83,25 +99,28 @@ export default function UserTableRow({
       >
         <MenuItem onClick={handleCloseMenu}>
           <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
-          Edit
+          ویرایش
         </MenuItem>
 
         <MenuItem onClick={handleCloseMenu} sx={{ color: "error.main" }}>
           <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
-          Delete
+          حذف
         </MenuItem>
-      </Popover>
+      </Popover> */}
     </>
   );
 }
 
 UserTableRow.propTypes = {
   avatarUrl: PropTypes.any,
-  company: PropTypes.any,
+  createdAt: PropTypes.any,
+  first_name: PropTypes.any,
+  last_name: PropTypes.any,
+  national_code: PropTypes.any,
   handleClick: PropTypes.func,
-  isVerified: PropTypes.any,
-  name: PropTypes.any,
-  role: PropTypes.any,
+  updatedAt: PropTypes.any,
+  _id: PropTypes.any,
+  phoneNumber: PropTypes.any,
   selected: PropTypes.any,
   status: PropTypes.string,
 };
