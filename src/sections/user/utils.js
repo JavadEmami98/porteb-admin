@@ -34,7 +34,6 @@ export function getComparator(order, orderBy) {
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
-
 export function applyFilter({ inputData, comparator, filterName }) {
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
@@ -45,12 +44,19 @@ export function applyFilter({ inputData, comparator, filterName }) {
   });
 
   inputData = stabilizedThis.map((el) => el[0]);
-  /* 
+
+  inputData = stabilizedThis.map((el) => el[0]);
+
   if (filterName) {
     inputData = inputData.filter(
-      (user) => user.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
+      (dataList) =>
+        (dataList.phoneNumber && dataList.phoneNumber.toLowerCase().includes(filterName.toLowerCase())) ||
+        (dataList.first_name && dataList.first_name.toLowerCase().includes(filterName.toLowerCase())) ||
+        (dataList.last_name && dataList.last_name.toLowerCase().includes(filterName.toLowerCase())) ||
+        (dataList.national_code && dataList.national_code.toLowerCase().includes(filterName.toLowerCase()))
     );
   }
- */
+
+
   return inputData;
 }

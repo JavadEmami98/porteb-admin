@@ -36,7 +36,7 @@ const Hijri = () => {
 
   return (
     <div>
-      <p className="text-red-600">{currentPersianDateTime}</p>
+      <p className="text-[#228B22]">{currentPersianDateTime}</p>
     </div>
   );
 };

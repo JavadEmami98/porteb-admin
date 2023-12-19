@@ -15,10 +15,12 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import axios from "axios";
 import { useEffect } from "react";
+import Card from "@mui/material/Card";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Button, Container, Stack, TablePagination } from "@mui/material";
 import Scrollbar from "src/components/scrollbar";
+import { CSVLink } from "react-csv";
 
 function createData(name, calories, fat, carbs, protein, price) {
   return {
@@ -54,7 +56,6 @@ function Row(props) {
           {row._id.length > 7 ? `...${row._id.slice(0, 7)}` : row._id}
         </TableCell>
         <TableCell align="center">
-          {" "}
           {row.user.length > 7 ? `...${row.user.slice(0, 7)}` : row.user}
         </TableCell>
         <TableCell align="center">{row.reasone}</TableCell>
@@ -84,12 +85,13 @@ function Row(props) {
         <TableCell align="center" sx={{ whiteSpace: "nowrap" }}>
           {new Date(row.created_at).toLocaleString("fa-IR")}
         </TableCell>
-        <TableCell align="center" sx={{ whiteSpace: "nowrap" }}>
+        {/*  <TableCell align="center" sx={{ whiteSpace: "nowrap" }}>
           {new Date(row.createdAt).toLocaleString("fa-IR")}
         </TableCell>
         <TableCell align="center" sx={{ whiteSpace: "nowrap" }}>
           {new Date(row.updatedAt).toLocaleString("fa-IR")}
-        </TableCell>
+        </TableCell> */}
+
         <TableCell align="right">
           <IconButton
             aria-label="expand row"
@@ -110,37 +112,11 @@ function Row(props) {
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
-                    <TableCell
-                      align="center"
-                      sx={{ bgcolor: "#228B2214", color: "#228B22" }}
-                    >
-                      شماره کارت{" "}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{ bgcolor: "#228B2214", color: "#228B22" }}
-                    >
-                      {" "}
-                      شماره کارت هش شده
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{ bgcolor: "#228B2214", color: "#228B22" }}
-                    >
-                      تاریخ پاسخ بانک{" "}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{ bgcolor: "#228B2214", color: "#228B22" }}
-                    >
-                      کارمزد
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{ bgcolor: "#228B2214", color: "#228B22" }}
-                    >
-                      درگاه{" "}
-                    </TableCell>
+                    <TableCell align="center">شماره کارت</TableCell>
+                    <TableCell align="center">شماره کارت هش شده</TableCell>
+                    <TableCell align="center">تاریخ پاسخ بانک</TableCell>
+                    <TableCell align="center">کارمزد</TableCell>
+                    <TableCell align="center">درگاه</TableCell>
                   </TableRow>
                 </TableHead>
                 {/*   <TableBody>
@@ -165,7 +141,6 @@ function Row(props) {
                   <TableRow>
                     <TableCell align="center">{row.cardnumber}</TableCell>
                     <TableCell align="center">
-                      {" "}
                       {row.cardhashpan && row.cardhashpan.length > 7
                         ? `...${row.cardhashpan.slice(0, 7)}`
                         : row.cardhashpan}
@@ -236,7 +211,23 @@ export default function Transactions() {
   const [dataList, setDataList] = useState([]);
 
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [invoices, setInvoices] = useState({
+    body: [],
+    header: [
+      "_id",
+      "user",
+      "reasone",
+      "status",
+      "amount",
+      "created_at",
+      "cardnumber",
+      "cardhashpan",
+      "bankResponseTime",
+      "fee",
+      "gateway",
+    ],
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -249,6 +240,22 @@ export default function Transactions() {
             },
           }
         );
+        setInvoices({
+          body: response.data,
+          header: [
+            "_id",
+            "user",
+            "reasone",
+            "status",
+            "amount",
+            "created_at",
+            "cardnumber",
+            "cardhashpan",
+            "bankResponseTime",
+            "fee",
+            "gateway",
+          ],
+        });
 
         setDataList(response.data);
       } catch (error) {
@@ -259,7 +266,7 @@ export default function Transactions() {
     fetchData();
   }, [userInfo]);
 
- const handleChangePage = (event, newPage) => {
+  const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
@@ -267,9 +274,7 @@ export default function Transactions() {
     setPage(0);
     setRowsPerPage(parseInt(event.target.value, 10));
   };
-  
 
- 
   return (
     <Container>
       <Stack
@@ -284,59 +289,72 @@ export default function Transactions() {
           sx={{ color: "#fff", "&:hover": { bgcolor: "#228B22" } }}
           /*   startIcon={<Iconify icon="eva:plus-fill" />} */
         >
-          {/*  <CSVLink
-            filename={new Date().toLocaleDateString("fa") + "خروجی  کاربران"}
+          <CSVLink
+            filename={new Date().toLocaleDateString("fa") + "خروجی  تراکنش ها"}
             data={invoices.body}
             headers={invoices.header}
           >
-            خروجی اکسل
-          </CSVLink>  */}
-          دانلود فایل اکسل
+            دانلود فایل اکسل
+          </CSVLink>
         </Button>
       </Stack>
       {dataList.length > 0 ? (
-<>
-<Scrollbar>
-      <TableContainer component={Paper}>
-        <Table aria-label="collapsible table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">آیدی</TableCell>
-              <TableCell align="center"> کاربر</TableCell>
-              <TableCell align="center">تاریخ</TableCell>
-              <TableCell align="center">وضعیت</TableCell>
-              <TableCell align="center">مقدار </TableCell>
-              <TableCell align="center">شماره پیگیری</TableCell>
-              <TableCell align="center">وضعیت</TableCell>
-              <TableCell align="center">وضعیت</TableCell>
-              <TableCell />
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {dataList.map((row) => (
-              <Row key={row.id} row={row} />
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+        <Card>
+          <Scrollbar>
+            <TableContainer component={Paper}>
+              <Table aria-label="collapsible table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="center">آیدی</TableCell>
+                    <TableCell align="center"> کاربر</TableCell>
+                    <TableCell align="center">دلیل</TableCell>
+                    <TableCell align="center">وضعیت</TableCell>
+                    <TableCell align="center">مقدار </TableCell>
+                    <TableCell align="center"> زمان پرداخت</TableCell>
+                    {/*       <TableCell align="center">createdAt</TableCell>
+                    <TableCell align="center">updatedAt</TableCell> */}
+                    <TableCell />
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {dataList
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row) => (
+                      <Row key={row.id} row={row} />
+                    ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
 
-      <TablePagination
-        sx={{ display: "flex", flexDirection: "row-reverse" }}
-        page={page}
-        labelRowsPerPage={"تعداد ردیف ها در صفحه :"}
-        labelDisplayedRows={({ from, to, count }) =>
-          `نمایش ردیف‌های ${from}-${to} از کل ${count}`
-        }
-        component="div"
-        count={dataList.length}
-        rowsPerPage={rowsPerPage}
-        onPageChange={handleChangePage}
-        rowsPerPageOptions={[10, 15, 50]}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      /></Scrollbar></>
-     ) : (
-      <Box sx={{display:"flex",height:"100%",width:"100%",justifyContent:"center",alignItems:"center"}}>
-        <Typography sx={{fontSize:"20px"}}>در حال دریافت اطلاعات...</Typography>
+            <TablePagination
+              sx={{ display: "flex", flexDirection: "row-reverse" }}
+              page={page}
+              labelRowsPerPage={"تعداد ردیف ها در صفحه :"}
+              labelDisplayedRows={({ from, to, count }) =>
+                `نمایش ردیف‌های ${from}-${to} از کل ${count}`
+              }
+              component="div"
+              count={dataList.length}
+              rowsPerPage={rowsPerPage}
+              onPageChange={handleChangePage}
+              rowsPerPageOptions={[10, 15, 50]}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </Scrollbar>
+        </Card>
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            height: "100%",
+            width: "100%",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Typography sx={{ fontSize: "20px" }}>
+            در حال دریافت اطلاعات...
+          </Typography>
         </Box>
       )}
     </Container>

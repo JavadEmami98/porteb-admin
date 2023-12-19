@@ -19,7 +19,7 @@ function Time() {
 
   return (
     <div>
-      <p className="text-red-600">{formattedTime}</p>
+      <p className="text-[#228B22]">{formattedTime}</p>
     </div>
   );
 }

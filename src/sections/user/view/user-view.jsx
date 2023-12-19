@@ -149,8 +149,9 @@ export default function UserPage() {
   }; */
 
   const handleFilterByName = (event) => {
+    const inputValue = event.target.value;
     setPage(0);
-    setFilterName(event.target.value);
+    setFilterName(inputValue);
   };
 
   const dataFiltered = applyFilter({
@@ -185,100 +186,115 @@ export default function UserPage() {
           </CSVLink>
         </Button>
       </Stack>
-   {dataList.length > 0 ? (
-<>
-      <Card>
-        <UserTableToolbar
-          numSelected={selected.length}
-          filterName={filterName}
-          onFilterName={handleFilterByName}
-          dataList={dataList}
-        />
-     
-        <Scrollbar>
-          <TableContainer sx={{ overflow: "unset" }}>
-            <Table sx={{ minWidth: 800 }}>
-              <UserTableHead
-                order={order}
-                orderBy={orderBy}
-                rowCount={users.length}
-                numSelected={selected.length}
-                onRequestSort={handleSort}
-                onSelectAllClick={handleSelectAllClick}
-                headLabel={[
-                  { id: "first_name ", label: "نام" },
-                  { id: "last_name", label: "نام خانوادگی" },
-                  { id: "national_code ", label: "کد ملی" },
-                  { id: "_id", label: "آیدی" },
-                  { id: "createdAt", label: "زمان ساخت اکانت" },
-                  { id: "phoneNumber", label: "شماره همراه" },
+      {dataList.length > 0 ? (
+        <>
+          <Card>
+            <UserTableToolbar
+              numSelected={selected.length}
+              filterName={filterName}
+              onFilterName={handleFilterByName}
+              dataList={dataList}
+            />
 
-                  {
-                    id: "accountExpiryDate",
-                    label: "تاریخ پایان اشتراک",
-                    align: "center",
-                  },
-                  { id: "status", label: "تعداد بیماران" },
-                  { id: "isAdmin", label: "نقش" },
-                  /*   { id: "",label:"" }, */
-                ]}
-              />
-              <TableBody>
-                {dataList
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => (
-                    <UserTableRow
-                      key={row.id}
-                      phoneNumber={row.phoneNumber}
-                      first_name={row.first_name}
-                      last_name={row.last_name}
-                      national_code={row.national_code}
-                      _id={row._id}
-                      /*   status={row.status} */
-                      createdAt={new Date(row.createdAt).toLocaleString(
-                        "fa-IR"
-                      )}
-                      avatarUrl={row.avatarUrl}
-                      accountExpiryDate={
-                        row.accountExpiryDate
-                          ? new Date(row.accountExpiryDate).toLocaleString(
-                              "fa-IR"
-                            )
-                          : "-"
-                      }
-                      isAdmin={row.isAdmin}
-                      selected={selected.indexOf(row.name) !== -1}
-                      handleClick={(event) => handleClick(event, row.name)}
+            <Scrollbar>
+              <TableContainer sx={{ overflow: "unset" }}>
+                <Table sx={{ minWidth: 800 }}>
+                  <UserTableHead
+                    order={order}
+                    orderBy={orderBy}
+                    rowCount={users.length}
+                    numSelected={selected.length}
+                    onRequestSort={handleSort}
+                    onSelectAllClick={handleSelectAllClick}
+                    headLabel={[
+                      { id: "first_name ", label: "نام" },
+                      { id: "last_name", label: "نام خانوادگی" },
+                      { id: "national_code ", label: "کد ملی" },
+                      { id: "_id", label: "آیدی" },
+                      { id: "createdAt", label: "زمان ساخت اکانت" },
+                      { id: "phoneNumber", label: "شماره همراه" },
+
+                      {
+                        id: "accountExpiryDate",
+                        label: "تاریخ پایان اشتراک",
+                        align: "center",
+                      },
+                      { id: "status", label: "تعداد بیماران" },
+                      { id: "isAdmin", label: "نقش" },
+                      /*   { id: "",label:"" }, */
+                    ]}
+                  />
+                  <TableBody>
+                    {dataFiltered
+                      .slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                      .map((row) => (
+                        <UserTableRow
+                          key={row.id}
+                          phoneNumber={row.phoneNumber}
+                          first_name={row.first_name}
+                          last_name={row.last_name}
+                          national_code={row.national_code}
+                          _id={row._id}
+                          /*   status={row.status} */
+                          createdAt={new Date(row.createdAt).toLocaleString(
+                            "fa-IR"
+                          )}
+                          /*   avatarUrl={row.avatarUrl} */
+                          accountExpiryDate={
+                            row.accountExpiryDate
+                              ? new Date(row.accountExpiryDate).toLocaleString(
+                                  "fa-IR"
+                                )
+                              : "-"
+                          }
+                          isAdmin={row.isAdmin}
+                          selected={selected.indexOf(row.name) !== -1}
+                          handleClick={(event) => handleClick(event, row.name)}
+                        />
+                      ))}
+
+                    <TableEmptyRows
+                      height={77}
+                      emptyRows={emptyRows(page, rowsPerPage, users.length)}
                     />
-                  ))}
 
-                {/*  <TableEmptyRows
-                  height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, users.length)}
-                /> */}
-
-                {notFound && <TableNoData query={filterName} />}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Scrollbar>
-         <TablePagination
-          sx={{ display: "flex", flexDirection: "row-reverse" }}
-          page={page}
-          labelRowsPerPage={"تعداد ردیف ها در صفحه :"}
-          labelDisplayedRows={({ from, to, count }) => `نمایش ردیف‌های ${from}-${to} از کل ${count}`}
-          component="div"
-          count={dataList.length}
-          rowsPerPage={rowsPerPage}
-          onPageChange={handleChangePage}
-          rowsPerPageOptions={[5, 10, 25]}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        /> 
-       
-      
-      </Card></>  ) : (
-      <Box sx={{display:"flex",height:"100%",width:"100%",justifyContent:"center",alignItems:"center"}}>
-        <Typography sx={{fontSize:"20px"}}>در حال دریافت اطلاعات...</Typography>
+                    {notFound && <TableNoData query={filterName} />}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Scrollbar>
+            <TablePagination
+              sx={{ display: "flex", flexDirection: "row-reverse" }}
+              page={page}
+              labelRowsPerPage={"تعداد ردیف ها در صفحه :"}
+              labelDisplayedRows={({ from, to, count }) =>
+                `نمایش ردیف‌های ${from}-${to} از کل ${count}`
+              }
+              component="div"
+              count={dataList.length}
+              rowsPerPage={rowsPerPage}
+              onPageChange={handleChangePage}
+              rowsPerPageOptions={[5, 10, 25]}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </Card>
+        </>
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            height: "100%",
+            width: "100%",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Typography sx={{ fontSize: "20px" }}>
+            در حال دریافت اطلاعات...
+          </Typography>
         </Box>
       )}
     </Container>
