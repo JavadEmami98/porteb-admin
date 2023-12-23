@@ -21,6 +21,9 @@ import { useSelector } from "react-redux";
 import { Button, Container, Stack, TablePagination } from "@mui/material";
 import Scrollbar from "src/components/scrollbar";
 import { CSVLink } from "react-csv";
+import UserTableToolbar from "src/sections/user/user-table-toolbar";
+import { applyFilter, getComparator } from "src/sections/user/utils";
+import TableNoData from "src/sections/user/table-no-data";
 
 function createData(name, calories, fat, carbs, protein, price) {
   return {
@@ -210,6 +213,11 @@ export default function Transactions() {
 
   const [dataList, setDataList] = useState([]);
 
+  const [filterName, setFilterName] = useState("");
+  const [selected, setSelected] = useState([]);
+  const [order, setOrder] = useState("asc");
+  const [orderBy, setOrderBy] = useState("name");
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [invoices, setInvoices] = useState({
@@ -274,6 +282,19 @@ export default function Transactions() {
     setPage(0);
     setRowsPerPage(parseInt(event.target.value, 10));
   };
+  const handleFilterByName = (event) => {
+    const inputValue = event.target.value;
+    setPage(0);
+    setFilterName(inputValue);
+  };
+
+  const dataFiltered = applyFilter({
+    inputData: dataList,
+    comparator: getComparator(order, orderBy),
+    filterName,
+  });
+
+  const notFound = !dataFiltered.length && !!filterName;
 
   return (
     <Container>
@@ -300,6 +321,12 @@ export default function Transactions() {
       </Stack>
       {dataList.length > 0 ? (
         <Card>
+          <UserTableToolbar
+            numSelected={selected.length}
+            filterName={filterName}
+            onFilterName={handleFilterByName}
+            dataList={dataList}
+          />
           <Scrollbar>
             <TableContainer component={Paper}>
               <Table aria-label="collapsible table">
@@ -317,11 +344,12 @@ export default function Transactions() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {dataList
+                  {dataFiltered
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => (
                       <Row key={row.id} row={row} />
                     ))}
+                  {notFound && <TableNoData query={filterName} />}
                 </TableBody>
               </Table>
             </TableContainer>

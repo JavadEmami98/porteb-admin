@@ -43,7 +43,7 @@ export default function UserTableHead({
             sortDirection={orderBy === headCell.id ? order : false}
             sx={{ width: headCell.width, minWidth: headCell.minWidth }}
           >
-            {headCell.id === 'createdAt' || headCell.id === 'accountExpiryDate' ? (
+            {headCell.id === 'createdAt'  || headCell.id === 'amount' || headCell.id === 'accountExpiryDate' ? (
               <TableSortLabel
                 hideSortIcon
                 active={orderBy === headCell.id}

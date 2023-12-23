@@ -53,6 +53,8 @@ export function applyFilter({ inputData, comparator, filterName }) {
         (dataList.phoneNumber && dataList.phoneNumber.toLowerCase().includes(filterName.toLowerCase())) ||
         (dataList.first_name && dataList.first_name.toLowerCase().includes(filterName.toLowerCase())) ||
         (dataList.last_name && dataList.last_name.toLowerCase().includes(filterName.toLowerCase())) ||
+        (dataList.user && dataList.user.toLowerCase().includes(filterName.toLowerCase())) ||
+        (dataList._id && dataList._id.toLowerCase().includes(filterName.toLowerCase())) ||
         (dataList.national_code && dataList.national_code.toLowerCase().includes(filterName.toLowerCase()))
     );
   }

@@ -27,13 +27,16 @@ import navConfig from "./config-navigation";
 import { MenuItem } from "@mui/material";
 import Time from "src/components/Time/Time";
 import Hijri from "src/components/Hijri/Hijri";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { handleLogOut } from "src/redux/action";
 
 // ----------------------------------------------------------------------
 
 export default function Nav({ openNav, onCloseNav }) {
+  const userInfo = useSelector((state) => state.userLogin.userInfo);
+  const userData = useSelector((state) => state.userLogin.userData);
   const dispatch = useDispatch();
+
   const handleLogOuts = () => {
     dispatch(handleLogOut());
   };
@@ -60,13 +63,13 @@ export default function Nav({ openNav, onCloseNav }) {
         bgcolor: (theme) => alpha(theme.palette.grey[500], 0.12),
       }}
     >
-      <Avatar src={account.photoURL} alt="photoURL" />
+      <Avatar src= {userData && userData.first_name} alt="photoURL" />
 
       <Box sx={{ ml: 2 }}>
-        <Typography variant="subtitle2">{account.displayName}</Typography>
+          <Typography variant="subtitle2"> {userData && userData.first_name}</Typography>
 
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
-          {account.role}
+          {userData && userData.last_name}
         </Typography>
       </Box>
     </Box>
