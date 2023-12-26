@@ -14,8 +14,18 @@ export const userLoginReducer = (userInfo = {}, action) => {
   }
 };
 
+export const ThemeTogglerReducer = (themeDisplay = {}, action) => {
+  switch (action.type) {
+    case types.THEME:
+      return { themeDisplay: action.payload };
+    default:
+      return themeDisplay;
+  }
+};
+
 const reducers = {
   userLogin: userLoginReducer,
+  ThemeToggler: ThemeTogglerReducer,
 };
 
 export default combineReducers(reducers);

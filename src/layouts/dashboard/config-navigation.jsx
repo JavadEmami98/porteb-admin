@@ -35,6 +35,11 @@ const navConfig = [
     path: "/login",
     icon: icon("ic_lock"),
   },
+  {
+    title: "رزرو ها ",
+    path: "/reserve",
+    icon: icon("ic_lock"),
+  },
 ];
 
 export default navConfig;

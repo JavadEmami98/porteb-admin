@@ -11,6 +11,8 @@ import Transactions from "./page/Transactions/Transactions";
 import { useEffect } from "react";
 import { fetchUserDataSuccess } from "./redux/action";
 import axios from "axios";
+import Reserve from "./page/Reserve/Reserve";
+import SetTheme from "./components/SetTheme/SetTheme";
 
 function App() {
   const userLogin = useSelector((state) => state.userLogin);
@@ -52,6 +54,8 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/user" element={<User />} />
                 <Route path="/transactions" element={<Transactions />} />
+                <Route path="/reserve" element={<Reserve />} />
+                <Route path="/setting" element={<SetTheme />} />
               </Routes>
             </DashboardLayout>
           </ThemeProvider>

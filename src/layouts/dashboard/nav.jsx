@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import PropTypes from "prop-types";
 import { IoLogOutOutline } from "react-icons/io5";
 import { ImCalendar } from "react-icons/im";
+import { IoSettingsOutline } from "react-icons/io5";
+
 
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
@@ -29,6 +31,7 @@ import Time from "src/components/Time/Time";
 import Hijri from "src/components/Hijri/Hijri";
 import { useDispatch, useSelector } from "react-redux";
 import { handleLogOut } from "src/redux/action";
+import { Link } from "react-router-dom";
 
 // ----------------------------------------------------------------------
 
@@ -63,10 +66,13 @@ export default function Nav({ openNav, onCloseNav }) {
         bgcolor: (theme) => alpha(theme.palette.grey[500], 0.12),
       }}
     >
-      <Avatar src= {userData && userData.first_name} alt="photoURL" />
+      <Avatar src={userData && userData.first_name} alt="photoURL" />
 
       <Box sx={{ ml: 2 }}>
-          <Typography variant="subtitle2"> {userData && userData.first_name}</Typography>
+        <Typography variant="subtitle2">
+          {" "}
+          {userData && userData.first_name}
+        </Typography>
 
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
           {userData && userData.last_name}
@@ -118,7 +124,7 @@ export default function Nav({ openNav, onCloseNav }) {
         sx={{
           px: 2.5,
           pb: 3,
-          mt: 15,
+          mt: 4,
         }}
       >
         {/*   <Stack alignItems="center" spacing={3} sx={{ pt: 5, borderRadius: 2, position: 'relative' }}>
@@ -146,6 +152,14 @@ export default function Nav({ openNav, onCloseNav }) {
         </Button>
       </Stack> */}
       </Box>
+    <Link to={"/setting"}>
+      <MenuItem sx={{paddingX:"1rem",paddingY:"0.75rem"}}>
+      <Box
+          component={IoSettingsOutline}
+          sx={{ mr: 1, width: "1.25rem", height: "1.25rem" }}
+        />
+        نتظیمات
+      </MenuItem></Link>
       <MenuItem
         onClick={handleLogOuts}
         sx={{

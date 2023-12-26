@@ -36,6 +36,11 @@ const navConfig = [
     icon: icon("ic_lock"),
   },
   {
+    title: "reserve",
+    path: "/reserve",
+    icon: icon("ic_disabled"),
+  },
+  {
     title: "Not found",
     path: "/404",
     icon: icon("ic_disabled"),

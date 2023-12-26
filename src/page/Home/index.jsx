@@ -1,6 +1,6 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import axios from "axios";
 import CardPrice from "src/components/CardPrice/CardPrice";
 
 function Home() {
@@ -8,43 +8,56 @@ function Home() {
   const { userInfo } = userLogin;
   const [dataList, setDataList] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/prices/getAll`,
-          {
-            headers: {
-              Authorization: `Bearer ${userInfo?.token}`,
-            },
-          }
-        );
-
-        setDataList(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
+ 
+const fetchData = async () => {
+  try {
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}/prices/getAll`,
+      {
+        headers: {
+          Authorization: `Bearer ${userInfo?.token}`,
+        },
       }
-    };
+    );
 
-    fetchData();
-  }, [userInfo]);
+    console.log("API Response:", response.data);
 
-  const handleInputChange = async (index, field, value) => {
+    setDataList(response.data);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+
+useEffect(() => {
+  fetchData();
+}, [userInfo]);
+
+  const handleInputChange = (index, field, value) => {
+    const newDataList = [...dataList];
+    newDataList[index] = { ...newDataList[index], [field]: value };
+    setDataList(newDataList);
+  };
+
+  const handleSubmit = async (index) => {
     try {
-      const newDataList = [...dataList];
-      newDataList[index] = { ...newDataList[index], [field]: value };
-      setDataList(newDataList);
-
-      await axios.put(
-        `${process.env.REACT_APP_API_URL}/prices/editPrice/${newDataList[index].id}`,
-        newDataList[index],
+      console.log("Submitting data:", index, dataList[index]);
+  
+      const id = dataList[index]?.id;
+      if (!id) {
+        console.error("Invalid ID:", id);
+        return;
+      }
+  
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_URL}/prices/editPrice/${id}`,
+        dataList[index],
         {
           headers: {
             Authorization: `Bearer ${userInfo?.token}`,
           },
         }
       );
-      console.log("Data updated successfully");
+      console.log("Data updated successfully", response.data);
     } catch (error) {
       console.error("Error updating data:", error);
     }
@@ -57,9 +70,9 @@ function Home() {
           <CardPrice
             key={index}
             dataItem={dataItem}
-            onInputChange={(field, value) =>
-              handleInputChange(index, field, value)
-            }
+            index={index}
+            onInputChange={(field, value) => handleInputChange(index, field, value)}
+            onSubmit={handleSubmit}
           />
         ))}
       </div>

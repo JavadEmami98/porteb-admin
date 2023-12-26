@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -8,45 +9,22 @@ import {
   TextField,
 } from "@mui/material";
 import axios from "axios";
-import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
 const formatNumberWithCommas = (number) => {
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
-const CardPrice = ({ dataItem, index, onInputChange }) => {
+const CardPrice = ({ dataItem, index, onInputChange, onSubmit }) => {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
-  const [amount, setAmount] = useState("");
-  const [dataList, setDataList] = useState([]);
 
-
-  const sumbitData = async (index, field, value) => {
-    try {
-      const newDataList = [...dataList];
-      newDataList[index] = { ...newDataList[index], [field]: value };
-      setDataList(newDataList);
-
-      await axios.put(
-        `${process.env.REACT_APP_API_URL}/prices/editPrice/${newDataList[index].id}`,
-        newDataList[index],
-        {
-          headers: {
-            Authorization: `Bearer ${userInfo?.token}`,
-          },
-        }
-      );
-      console.log("Data updated successfully");
-    } catch (error) {
-      console.error("Error updating data:", error);
-    }
-  };
   const handleAmountChange = (event) => {
     const rawValue = event.target.value;
     const numericValue = rawValue.replace(/\D/g, "");
-    setAmount(formatNumberWithCommas(numericValue));
+    onInputChange("price", numericValue);
   };
+
   return (
     <>
       <div className="flex flex-col">
@@ -65,7 +43,7 @@ const CardPrice = ({ dataItem, index, onInputChange }) => {
             value={dataItem.title}
             onChange={(e) => onInputChange("title", e.target.value)}
             id={`outlined-basic-${index}`}
-            label="اسم  طرح"
+            label="اسم طرح"
             variant="outlined"
             sx={{ width: "100%", bgcolor: "#fff" }}
           />
@@ -110,7 +88,7 @@ const CardPrice = ({ dataItem, index, onInputChange }) => {
                   ? dataItem.price
                   : Number(dataItem.price).toLocaleString("en") || ""
               }
-              onChange={(e) => onInputChange("price", e.target.value)}
+              onChange={handleAmountChange}
             />
           </FormControl>
         </Box>
@@ -128,7 +106,7 @@ const CardPrice = ({ dataItem, index, onInputChange }) => {
               marginX: { md: "0.75rem", xs: "0.75rem", sm: "0.75rem", lg: 0 },
               "&:hover": { backgroundColor: "#228B22" },
             }}
-            onClick={sumbitData}
+            onClick={() => onSubmit(index)}
           >
             ثبت اطلاعات
           </Button>

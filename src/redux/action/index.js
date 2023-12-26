@@ -21,3 +21,11 @@ export const fetchUserDataSuccess = (userData) => ({
   type: types.FETCH_USER_DATA_SUCCESS,
   payload: userData,
 });
+
+export const handleThemeToggle = (data) => async (dispatch, getState) => {
+  localStorage.setItem("theme", data);
+  dispatch({
+    type: types.THEME,
+    payload: data,
+  });
+};
